@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daisy Ranawat · Autonomy & Vehicle Control</title>
+  <meta name="description" content="Portfolio of Daisy Ranawat: automotive embedded engineer working on perception and vehicle control for autonomous systems.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <script src="site-data.js"></script>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <span class="mark" id="mark">HS</span>
+    <nav aria-label="Sections">
+      <a href="#projects">Projects</a>
+      <a href="#research">Research</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow" id="loc"></p>
+        <h1 id="name"></h1>
+        <p class="role" id="role"></p>
+        <p class="summary" id="summary"></p>
+        <div class="actions" id="actions"></div>
+      </div>
+      <figure class="scope" aria-label="Illustration: closed-loop lateral offset settling to zero">
+        <svg id="trace" viewBox="0 0 400 220" role="img" aria-hidden="true"></svg>
+        <figcaption class="scope-cap">
+          <span>lateral offset e<sub>y</sub> [m] vs. t [s]</span>
+          <span>LQI · trailer path following</span>
+        </figcaption>
+      </figure>
+    </div>
+    <div class="wrap stats" id="stats"></div>
+  </section>
+
+  <section class="block" id="projects">
+    <div class="wrap">
+      <div class="label"><span class="n">01</span> / Projects</div>
+      <div class="content">
+        <h2>Perception and control, built end to end</h2>
+        <div class="projects" id="project-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="research">
+    <div class="wrap">
+      <div class="label"><span class="n">02</span> / Research</div>
+      <div class="content research">
+        <h2>Path following and lateral stability of a tractor-semitrailer</h2>
+        <p>Articulated heavy vehicles can sway and lose lateral stability at speed. My research models the tractor-semitrailer as a coupled dynamic system and designs an LQI steering controller that keeps the combination on its path while damping trailer sway.</p>
+        <p>The work is headed for a research paper, with the option to extend it into a thesis.</p>
+        <dl class="spec">
+          <dt>Role</dt><dd>Research Assistant, vehicle dynamics lab, UM-Dearborn</dd>
+          <dt>Controller</dt><dd>Linear quadratic with integral action (LQI), steering input</dd>
+          <dt>Goals</dt><dd>Path tracking error, articulation angle, yaw stability</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="experience">
+    <div class="wrap">
+      <div class="label"><span class="n">03</span> / Experience</div>
+      <div class="content">
+        <h2>Seven years shipping automotive software</h2>
+        <ul class="rows" id="exp-list"></ul>
+        <div class="sub">
+          <h3>Education</h3>
+          <ul class="rows" id="edu-list"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="skills">
+    <div class="wrap">
+      <div class="label"><span class="n">04</span> / Skills</div>
+      <div class="content">
+        <h2>From the microcontroller to the model</h2>
+        <div class="skills" id="skill-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="contact">
+    <div class="wrap">
+      <div class="label"><span class="n">05</span> / Contact</div>
+      <div class="content contact">
+        <h2>Let's talk</h2>
+        <p>I'm looking for full-time roles in autonomy, ADAS and vehicle software starting mid-2028.</p>
+        <div id="contact-body"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap" id="foot"></div></footer>
+
+<script>
+(function () {
+  const S = window.SITE;
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const ext = (url) => /^https?:/.test(url) ? ' target="_blank" rel="noopener"' : "";
+
+  // Hero
+  $("name").textContent = S.name;
+  $("role").textContent = S.role;
+  $("summary").textContent = S.summary;
+  $("loc").textContent = S.location + " · Open to full-time roles";
+  $("mark").textContent = S.name.split(" ").map((w) => w[0]).join("");
+
+  const L = S.links;
+  const btns = [];
+  btns.push('<a class="btn primary" href="#projects">See projects</a>');
+  if (L.github) btns.push(`<a class="btn" href="${esc(L.github)}"${ext(L.github)}>GitHub</a>`);
+  if (L.linkedin) btns.push(`<a class="btn" href="${esc(L.linkedin)}"${ext(L.linkedin)}>LinkedIn</a>`);
+  if (L.resume) btns.push(`<a class="btn" href="${esc(L.resume)}"${ext(L.resume)}>Resume</a>`);
+  $("actions").innerHTML = btns.join("");
+
+  $("stats").innerHTML = S.stats.map((s) =>
+    `<div class="stat"><b>${esc(s.value)}</b><small>${esc(s.unit)}</small><span>${esc(s.label)}</span></div>`
+  ).join("");
+
+  // Projects
+  const statusText = { "done": "Complete", "in-progress": "In progress", "planned": "Up next" };
+  $("project-list").innerHTML = S.projects.map((p) => {
+    const links = [];
+    if (p.repo) links.push(`<a href="${esc(p.repo)}"${ext(p.repo)}>Code →</a>`);
+    if (p.demo) links.push(`<a href="${esc(p.demo)}"${ext(p.demo)}>Demo / report →</a>`);
+    if (!links.length) links.push('<span class="pending">Repository coming soon</span>');
+    return `<article class="card">
+      <div class="card-head">
+        <div><h3>${esc(p.title)}</h3><div class="ctx">${esc(p.context)}</div></div>
+        <span class="chip ${esc(p.status)}">${statusText[p.status] || esc(p.status)}</span>
+      </div>
+      <p>${esc(p.summary)}</p>
+      <ul class="tags">${p.tags.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
+      <div class="card-links">${links.join("")}</div>
+    </article>`;
+  }).join("");
+
+  // Experience & education
+  $("exp-list").innerHTML = S.experience.map((e) =>
+    `<li><strong>${esc(e.company)}</strong><span>${esc(e.focus)}</span></li>`).join("");
+  $("edu-list").innerHTML = S.education.map((e) =>
+    `<li><strong>${esc(e.degree)}</strong><span>${esc([e.school, e.detail].filter(Boolean).join(" · "))}</span></li>`).join("");
+
+  // Skills
+  $("skill-list").innerHTML = S.skills.map((g) =>
+    `<div><h3>${esc(g.group)}</h3><ul class="tags">${g.items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul></div>`).join("");
+
+  // Contact
+  const c = [];
+  if (L.email) c.push(`<p class="email">${esc(L.email)}</p>`);
+  const cb = [];
+  if (L.linkedin) cb.push(`<a class="btn primary" href="${esc(L.linkedin)}"${ext(L.linkedin)}>Message me on LinkedIn</a>`);
+  if (L.github) cb.push(`<a class="btn" href="${esc(L.github)}"${ext(L.github)}>GitHub</a>`);
+  if (L.scholar) cb.push(`<a class="btn" href="${esc(L.scholar)}"${ext(L.scholar)}>Publications</a>`);
+  $("contact-body").innerHTML = c.join("") + `<div class="actions">${cb.join("")}</div>`;
+
+  $("foot").textContent = "© " + new Date().getFullYear() + " " + S.name;
+
+  // Hero trace: damped closed-loop response of lateral offset, drawn to scale
+  const svg = $("trace");
+  const W = 400, H = 220, pad = { l: 28, r: 10, t: 14, b: 22 };
+  const tMax = 10, yMin = -0.7, yMax = 1.0;
+  const x = (t) => pad.l + (t / tMax) * (W - pad.l - pad.r);
+  const y = (v) => pad.t + (1 - (v - yMin) / (yMax - yMin)) * (H - pad.t - pad.b);
+  let g = "";
+  for (let t = 0; t <= tMax; t += 2) g += `<line x1="${x(t)}" y1="${pad.t}" x2="${x(t)}" y2="${H - pad.b}" stroke="var(--trace-grid)"/>
+    <text x="${x(t)}" y="${H - 6}" fill="var(--muted)" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="middle">${t}</text>`;
+  [-0.5, 0, 0.5, 1.0].forEach((v) => g += `<line x1="${pad.l}" y1="${y(v)}" x2="${W - pad.r}" y2="${y(v)}" stroke="var(--trace-grid)"/>
+    <text x="${pad.l - 6}" y="${y(v) + 3}" fill="var(--muted)" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="end">${v}</text>`);
+  g += `<line x1="${pad.l}" y1="${y(0)}" x2="${W - pad.r}" y2="${y(0)}" stroke="var(--muted)" stroke-dasharray="3 4"/>`;
+  const pts = [], pts2 = [];
+  for (let i = 0; i <= 200; i++) {
+    const t = (i / 200) * tMax;
+    pts.push(`${x(t).toFixed(1)},${y(Math.exp(-0.25 * t) * Math.cos(1.6 * t)).toFixed(1)}`);
+    pts2.push(`${x(t).toFixed(1)},${y(Math.exp(-0.75 * t) * (Math.cos(1.4 * t) + 0.5 * Math.sin(1.4 * t))).toFixed(1)}`);
+  }
+  g += `<polyline points="${pts.join(" ")}" fill="none" stroke="var(--muted)" stroke-width="1.2" opacity=".55"/>`;
+  g += `<polyline class="ctl" points="${pts2.join(" ")}" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linejoin="round"/>`;
+  const lx = x(5.4), mono = 'font-size="10" font-family="JetBrains Mono, monospace"';
+  g += `<rect x="${lx - 6}" y="${y(0.98)}" width="${x(10) - lx + 4}" height="34" fill="var(--surface)"/>`;
+  g += `<line x1="${lx}" y1="${y(0.88)}" x2="${lx + 18}" y2="${y(0.88)}" stroke="var(--muted)" stroke-width="1.2" opacity=".7"/>
+        <text x="${lx + 24}" y="${y(0.88) + 3}" fill="var(--muted)" ${mono}>open-loop sway</text>`;
+  g += `<line x1="${lx}" y1="${y(0.73)}" x2="${lx + 18}" y2="${y(0.73)}" stroke="var(--accent)" stroke-width="2.4"/>
+        <text x="${lx + 24}" y="${y(0.73) + 3}" fill="var(--accent)" ${mono}>with controller</text>`;
+  svg.innerHTML = g;
+})();
+</script>
+</body>
+</html>
